@@ -1,7 +1,20 @@
 <template>
     <div id="calendar">
-        The calendar will go here.
-        {{ days }}
+        <!-- Iterates through all the days !-->
+        <div class="day" v-for="day in days" v-bind:key="day[0]">
+            <!-- If the day is not a filler day with no date !-->
+            <div class="dateLable" v-if="day.length != 0">
+                <!-- display the date !-->
+                {{ day[0] }}
+                <!-- If the day has tasks !-->
+                <div v-if="day.length >1">
+                    <!-- display all the tasks !-->
+                    <div class="task" v-for="n in day.length-1" v-bind:key="n">
+                        {{ day[n][1] }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -68,5 +81,13 @@ export default {
 </script>
 
 <style>
-
+#calendar{
+    display: grid;
+    grid-template-columns: 10vw 10vw 10vw 10vw 10vw 10vw 10vw;
+}
+.day{
+    border: solid 1px black;
+    background-color: #6883BA;
+    height: 14vh;
+}
 </style>

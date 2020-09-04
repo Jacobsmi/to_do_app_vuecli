@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div id="mainTitle">To Do App</div>
     <Calendar />
   </div>
 </template>
@@ -16,5 +17,13 @@ export default {
 </script>
 
 <style>
-
+#app{
+  display: grid;
+  justify-items: center;
+}
+#mainTitle{
+  margin-top: -5px;
+  margin-bottom: 5px;
+  font-size: 5vh;
+}
 </style>
