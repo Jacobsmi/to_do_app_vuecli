@@ -1,24 +1,5 @@
 # to_do_app_vuecli
 
-## Project setup
-```
-npm install
-```
+## About
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Frontend for a project that allows a user to add events to their 'To-Do-List' and then displays them on an interactive calendar
