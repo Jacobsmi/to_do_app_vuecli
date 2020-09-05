@@ -1,29 +1,52 @@
 <template>
-    <div id="calendar">
-        <!-- Iterates through all the days !-->
-        <div class="day" v-for="day in days" v-bind:key="day[0]">
-            <!-- If the day is not a filler day with no date !-->
-            <div class="dateLable" v-if="day.length != 0">
-                <!-- display the date !-->
-                {{ day[0] }}
-                <!-- If the day has tasks !-->
-                <div v-if="day.length >1">
-                    <!-- display all the tasks !-->
-                    <div class="task" v-for="n in day.length-1" v-bind:key="n">
-                        {{ day[n][1] }}
+    <div id="calendarComp">
+        <div v-show="calendarShowing" id="calendar">
+            <!-- Iterates through all the days !-->
+            <div class="day" v-for="day in days" v-bind:key="day[0]">
+                <!-- If the day is not a filler day with no date !-->
+                <div class="dateLable" v-if="day.length != 0">
+                    <!-- display the date !-->
+                    {{ day[0] }}
+                    <!-- If the day has tasks !-->
+                    <div v-if="day.length >1">
+                        <!-- display all the tasks !-->
+                        <div class="task" v-for="n in day.length-1" v-bind:key="n">
+                            <button v-on:click="taskClick(day[n][0])">{{ day[n][1] }}</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div v-show="taskShowing" id="task">
+            <Task />
+        </div>
     </div>
+    
 </template>
 
 <script>
+import Task from './Task'
+
 export default {
     name: 'Calendar', 
+    components: {
+        Task
+    },
+
     data: function () {
         return {
-            days: []
+            days: [],
+            calendarShowing: true,
+            taskShowing: false
+        }
+    },
+    methods: {
+        taskClick: function (buttonID){
+            // hides the calendar
+            this.calendarShowing = false
+            //document.getElementById("task").innerHTML = "<Task />"
+            this.taskShowing = true
+            console.log(buttonID)
         }
     },
     created(){
@@ -89,5 +112,8 @@ export default {
     border: solid 1px black;
     background-color: #6883BA;
     height: 14vh;
+}
+.task{
+    text-align: center;
 }
 </style>
