@@ -2,11 +2,11 @@
 <div id="task" v-if="task != null">
     <div id="taskData" v-show="!editing">
         Task Name: {{ task[1] }}<br>
-        Due Date: {{ task[2] }}
-        <div id="completed" v-if="!completed">
+        Due Date: {{ this.date }}
+        <div id="completed" v-if="task[3] === 1">
             Completed
         </div>
-        <div id="notCompleted" v-else>
+        <div id="notCompleted" v-if="task[3] === 0">
             Not Completed
         </div>
     </div>
@@ -36,7 +36,8 @@ export default {
     data: function () {
         return{
             completed: false,
-            editing: false
+            editing: false,
+            date: null
         }
     },
     watch:{
@@ -48,6 +49,8 @@ export default {
             }else{
                 this.completed = false
             }
+            let dateParts = this.task[2].split('-')
+            this.date = `${dateParts[1]}-${dateParts[2]}-${dateParts[0]}` 
         }
     },
     methods: {
@@ -61,7 +64,20 @@ export default {
             this.editing = false
         },
         submitClick: function (){
-            
+            let data = {
+                'id': this.task[0],
+                'name':document.getElementById("taskName").value,
+                'due': document.getElementById("dueDate").value,
+                'completed': document.getElementById("completed").value
+            }
+            fetch('http://127.0.0.1:5000/updatetask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            this.editing = false
         }
     }
     
