@@ -2,11 +2,12 @@
   <div id="app">
     <div id="mainTitle">To Do App</div>
     <Calendar v-on:visibilityChange='updateVisibility' />
+
   </div>
 </template>
 
 <script>
-import Calendar from './components/Calendar'
+import Calendar from './components/calendar/Calendar'
 
 export default {
   name: 'App',
@@ -16,7 +17,7 @@ export default {
   data: function (){
     return {
       calendarShow: false,
-      taskShow: false
+      taskShow: false,
     }
   },
   methods:{
@@ -28,11 +29,8 @@ export default {
       else if (comp === "task"){
         this.taskShow = value
       }
-    },
-
-    setTaskNum(num) { 
-      console.log(num)
     }
+
   }
 }
 </script>

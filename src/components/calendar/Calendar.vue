@@ -4,7 +4,7 @@
             <!-- Iterates through all the days !-->
             <div class="day" v-for="day in days" v-bind:key="day[0]">
                 <!-- If the day is not a filler day with no date !-->
-                <div class="dateLable" v-if="day.length != 0">
+                <div class="dateLabel" v-if="day.length != 0">
                     <!-- display the date !-->
                     {{ day[0] }}
                     <!-- If the day has tasks !-->
@@ -18,7 +18,8 @@
             </div>
         </div>
         <div v-show="taskShowing" id="task">
-            <Task />
+            <Task :task="clickedTask"/>
+            <button id="goBack" @click="goBack">Go Back</button>
         </div>
     </div>
     
@@ -30,6 +31,7 @@ import Task from './Task'
 export default {
     name: 'Calendar', 
     components: {
+        // eslint-disable-next-line
         Task
     },
 
@@ -37,16 +39,23 @@ export default {
         return {
             days: [],
             calendarShowing: true,
-            taskShowing: false
+            taskShowing: false, 
+            taskList: null,
+            clickedTask: null
         }
     },
     methods: {
         taskClick: function (buttonID){
             // hides the calendar
             this.calendarShowing = false
-            //document.getElementById("task").innerHTML = "<Task />"
+            // eslint-disable-next-line
+            this.clickedTask = this.taskList.find(element => element[0] === buttonID)
             this.taskShowing = true
-            console.log(buttonID)
+        },
+        
+        goBack: function (){
+            this.taskShowing = false
+            this.calendarShowing = true
         }
     },
     created(){
@@ -66,6 +75,8 @@ export default {
         // Waits until json has been parsed
         // Passes the list of tasks into an anon function
         .then(tasks =>{
+            // Set the Vue data var taskList equal to tasks from the API
+            this.taskList = tasks
             /*
                 task objects are represented as arrays where:
                 [0] => int:task id
@@ -113,7 +124,10 @@ export default {
     background-color: #6883BA;
     height: 14vh;
 }
-.task{
+#task{
     text-align: center;
+}
+#goBack{
+    margin: 0 auto;
 }
 </style>
