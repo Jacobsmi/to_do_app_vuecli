@@ -17,7 +17,7 @@
         <label for="dueDate">Due Date</label>
         <input type="date" id="dueDate" name="dueDate"><br>
         <label for="completed">Completed</label>
-        <input type="checkbox" name="completed" id="completed"><br><br><br>
+        <input type="checkbox" id="isComp"><br><br><br>
 
         <button id="cancel" v-on:click="cancelClick">Cancel</button>
         <button id="submit" v-on:click="submitClick">Submit</button>
@@ -35,41 +35,50 @@ export default {
     },
     data: function () {
         return{
-            completed: false,
             editing: false,
             date: null
         }
     },
     watch:{
-        task: function (val){
+        task: function (){
             this.editing = false
-            if (val[3] === 1){
-                console.log("True")
-                this.completed = true
-            }else{
-                this.completed = false
-            }
             let dateParts = this.task[2].split('-')
             this.date = `${dateParts[1]}-${dateParts[2]}-${dateParts[0]}` 
         }
     },
     methods: {
+        // SET UP THE EDIT COMPONENT
         editClick: function (){
+            console.log(`Editting ${this.task[3]}`)
             document.getElementById("taskName").value = this.task[1]
             document.getElementById("dueDate").value = this.task[2]
-            document.getElementById("completed").value = this.task[3]
+            if (this.task[3] === 1){
+                console.log("Should be checked")
+                document.getElementById("isComp").checked = true
+            }else{
+                document.getElementById("isComp").checked = false
+            }
             this.editing = true
         },
         cancelClick: function (){
             this.editing = false
         },
         submitClick: function (){
+            
+            let completed = 0
+            if (document.getElementById("isComp").checked === true){
+                console.log("Hit the if")
+                completed = 1
+            }
+            console.log(completed)
+            // Create a data dictionary that gets all the values for the task
             let data = {
                 'id': this.task[0],
                 'name':document.getElementById("taskName").value,
                 'due': document.getElementById("dueDate").value,
-                'completed': document.getElementById("completed").value
+                'completed': completed
             }
+            // Send the new task data to the API so it can be stored in the DB using fetch
             fetch(process.env.VUE_APP_UPDATE_TASK, {
                 method: 'POST',
                 headers: {
@@ -77,6 +86,14 @@ export default {
                 },
                 body: JSON.stringify(data)
             })
+
+            // Reset this.task values so they display without reloading the page
+            this.task[1] = document.getElementById("taskName").value
+            this.task[2] = document.getElementById("dueDate").value
+            let dateParts = this.task[2].split('-')
+            this.date = `${dateParts[1]}-${dateParts[2]}-${dateParts[0]}`
+            this.task[3] = completed
+
             this.editing = false
         }
     }
