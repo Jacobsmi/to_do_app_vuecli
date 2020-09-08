@@ -31,7 +31,6 @@ import Task from './Task'
 export default {
     name: 'Calendar', 
     components: {
-        // eslint-disable-next-line
         Task
     },
 
