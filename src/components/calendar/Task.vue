@@ -70,7 +70,7 @@ export default {
                 'due': document.getElementById("dueDate").value,
                 'completed': document.getElementById("completed").value
             }
-            fetch('http://127.0.0.1:5000/updatetask', {
+            fetch(process.env.VUE_APP_UPDATE_TASK, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
