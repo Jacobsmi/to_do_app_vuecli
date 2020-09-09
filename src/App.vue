@@ -1,34 +1,40 @@
 <template>
   <div id="app">
     <div id="mainTitle">To Do App</div>
-    <Calendar v-on:visibilityChange='updateVisibility' />
-
+    <Calendar v-show='calendarShow' v-on:visibilityChange='updateVisibility' />
+    <div v-show='addTaskShow' v-on:click="addClick" id="add">
+      <AddTask />
+    </div>
   </div>
 </template>
 
 <script>
 import Calendar from './components/calendar/Calendar'
-
+import AddTask from './components/addTasks/addTask'
 export default {
   name: 'App',
   components: {
-    Calendar
+    Calendar,
+    AddTask
   }, 
   data: function (){
     return {
-      calendarShow: false,
-      taskShow: false,
+      calendarShow: true,
+      addTaskShow: false,
     }
   },
   methods:{
-
-    updateVisibility(comp, value) {
-      if (comp === "calendar"){
+    updateVisibility: function (comp, value) {
+      if (comp === 'calendar'){
         this.calendarShow = value
+      }else if(comp === 'addTask'){
+        this.addTaskShow = value
       }
-      else if (comp === "task"){
-        this.taskShow = value
-      }
+    },
+
+    addClick: function(){
+      this.updateVisibility('addTask', false)
+      this.updateVisibility('calendar', true)
     }
 
   }

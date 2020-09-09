@@ -1,5 +1,8 @@
 <template>
     <div id="calendarComp">
+        <div id="loading" v-show="isLoading">
+            Calendar is loading
+        </div>
         <div v-show="calendarShowing" id="calendar">
             <!-- Iterates through all the days !-->
             <div class="day" v-for="day in days" v-bind:key="day[0]">
@@ -16,6 +19,7 @@
                     </div>
                 </div>
             </div>
+            <a id='addButton' v-on:click='addClick'><img id='plus' src="@/assets/plus.png"/></a>
         </div>
         <div v-show="taskShowing" id="task">
             <Task :task="clickedTask"/>
@@ -37,7 +41,8 @@ export default {
     data: function () {
         return {
             days: [],
-            calendarShowing: true,
+            isLoading: true,
+            calendarShowing: false,
             taskShowing: false, 
             taskList: null,
             clickedTask: null
@@ -55,6 +60,10 @@ export default {
         goBack: function (){
             this.taskShowing = false
             this.calendarShowing = true
+        },
+        addClick: function (){
+            this.$emit('visibilityChange', 'calendar', false)
+            this.$emit('visibilityChange', 'addTask', true)
         }
     },
     created(){
@@ -108,6 +117,8 @@ export default {
                 // Add an empty array to the end
                 this.days.push([])
             }
+            this.isLoading = false
+            this.calendarShowing = true
         })
     }
 }
@@ -116,12 +127,31 @@ export default {
 <style>
 #calendar{
     display: grid;
-    grid-template-columns: 10vw 10vw 10vw 10vw 10vw 10vw 10vw;
+    grid-template-columns: 12.5vw 12.5vw 12.5vw 12.5vw 12.5vw 12.5vw 12.5vw;
 }
 .day{
     border: solid 1px black;
     background-color: #6883BA;
-    height: 14vh;
+    height: 16.5vh;
+}
+#plus{ 
+    height: 5vh;
+    width: 5vh;
+}
+.bottomright {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+  font-size: 18px;
+}
+#addButton{
+    position: absolute;
+    bottom: 1vh;
+    right: 1vh;
+    height: 5vh;
+    width: 5vh;
+    border-radius: 50%;
+    background-color: #3BCEAC;
 }
 #task{
     text-align: center;
