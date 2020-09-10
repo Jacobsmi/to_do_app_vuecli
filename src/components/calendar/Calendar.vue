@@ -19,10 +19,9 @@
                     </div>
                 </div>
             </div>
-            <a id='addButton' v-on:click='addClick'><img id='plus' src="@/assets/plus.png"/></a>
         </div>
         <div v-show="taskShowing" id="task">
-            <Task :task="clickedTask"/>
+            <EditTask :task="clickedTask"/>
             <button id="goBack" @click="goBack">Go Back</button>
         </div>
     </div>
@@ -30,12 +29,12 @@
 </template>
 
 <script>
-import Task from './Task'
+import EditTask from './EditTask'
 
 export default {
     name: 'Calendar', 
     components: {
-        Task
+        EditTask
     },
 
     data: function () {
@@ -143,15 +142,6 @@ export default {
   bottom: 8px;
   right: 16px;
   font-size: 18px;
-}
-#addButton{
-    position: absolute;
-    bottom: 1vh;
-    right: 1vh;
-    height: 5vh;
-    width: 5vh;
-    border-radius: 50%;
-    background-color: #3BCEAC;
 }
 #task{
     text-align: center;

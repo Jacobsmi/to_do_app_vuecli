@@ -27,7 +27,7 @@
 
 <script>
 export default {
-    name: 'Task',
+    name: 'EditTask',
     props: {
         task:{
             required: true
