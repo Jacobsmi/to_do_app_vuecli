@@ -2,9 +2,12 @@
 
 ## In Progress
 
-- Add task works now need to update after add
+- Add validation to the Add Task field
 
 ## Completed
+
+- Add task works now need to update after add
+- Created delete function
 
 ## Need to Do
 
