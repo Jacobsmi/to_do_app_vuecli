@@ -11,6 +11,7 @@
         </div>
     </div>
     <button id="editButton" v-show="!editing" v-on:click="editClick">Edit</button>
+    <button id="deleteButton" v-show="!editing" v-on:click="deleteClick(task[0])">Delete</button>
     <div id="editTask" v-show="editing">
         <label for="taskName">Task Name</label>
         <input type="text" id="taskName" name="taskName">
@@ -94,6 +95,19 @@ export default {
             this.date = `${dateParts[1]}-${dateParts[2]}-${dateParts[0]}`
             this.task[3] = completed
 
+            this.editing = false
+        },
+        deleteClick: function (id){
+            this.$emit('delete', id)
+            fetch(process.env.VUE_APP_DELETE_TASK,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'id': id
+                })
+            })
             this.editing = false
         }
     }

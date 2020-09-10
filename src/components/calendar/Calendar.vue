@@ -21,8 +21,8 @@
             </div>
         </div>
         <div v-show="taskShowing" id="task">
-            <EditTask :task="clickedTask"/>
-            <button id="goBack" @click="goBack">Go Back</button>
+            <EditTask :task="clickedTask" v-on:delete='deleteCompleted'/>
+            <button id="goBack" v-on:click="goBack">Go Back</button>
         </div>
     </div>
     
@@ -61,29 +61,22 @@ export default {
             this.calendarShowing = true
         },
         addClick: function (){
-            this.$emit('visibilityChange', 'calendar', false)
+            this.$emit('visibilityChange', 'calthis.editing = falseendar', false)
             this.$emit('visibilityChange', 'addTask', true)
-        }
-    },
-    created(){
-        // Create a Date object to hold the current date
-        let curDate = new Date()
-        // Find the number of days in the current month
-        let daysInMonth = new Date(curDate.getFullYear(), curDate.getMonth()+1, 0).getDate()
-        // For each day in the month add the day of the month to the corresponding spot in the url
-        for (let i = 0; i < daysInMonth; i++){
-            this.days[i] = [i+1]
-        }
-        // Fetches Data from the API
-        fetch(process.env.VUE_APP_GET_TASKS)
-        // Waits until the data has been fetched then executes
-        // Returns the parsed json from the API response
-        .then(response => response.json())
-        // Waits until json has been parsed
-        // Passes the list of tasks into an anon function
-        .then(tasks =>{
-            // Set the Vue data var taskList equal to tasks from the API
-            this.taskList = tasks
+        },
+        deleteCompleted: function (id){
+            this.taskList = this.taskList.filter(el => el[0] !== id)
+            this.addTaskToCalendar(this.taskList)
+        },
+        addTaskToCalendar: function(tasks){
+            this.days = []
+            let curDate = new Date()
+            // Find the number of days in the current month
+            let daysInMonth = new Date(curDate.getFullYear(), curDate.getMonth()+1, 0).getDate()
+            // For each day in the month add the day of the month to the corresponding spot in the url
+            for (let i = 0; i < daysInMonth; i++){
+                this.days[i] = [i+1]
+            }
             /*
                 task objects are represented as arrays where:
                 [0] => int:task id
@@ -91,6 +84,7 @@ export default {
                 [2] => string:task due date(YEAR-MONTH-DAY)
                 [3] => int:completed (0=false, 1=true)
             */
+
             // Iterates through each task
             tasks.forEach(task => {
                 // Get the individual parts of the date
@@ -100,6 +94,7 @@ export default {
                     // Then check if in the current month
                     if (curDate.getMonth()+1 === parseInt(dateParts[1])){
                         // If both are true push the task array to the proper day
+                        console.log(task, "is being pushed")
                         this.days[parseInt(dateParts[2])-1].push(task)
                     }
                 }
@@ -117,7 +112,23 @@ export default {
                 this.days.push([])
             }
             this.isLoading = false
+            this.taskShowing = false
             this.calendarShowing = true
+
+        }
+
+    },
+    created(){
+        // Fetches Data from the API
+        fetch(process.env.VUE_APP_GET_TASKS)
+        // Waits until the data has been fetched then executes
+        // Returns the parsed json from the API response
+        .then(response => response.json())
+        // Waits until json has been parsed
+        // Passes the list of tasks into an anon function
+        .then(tasks =>{
+            this.taskList = tasks
+            this.addTaskToCalendar(tasks)
         })
     }
 }

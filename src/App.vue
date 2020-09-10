@@ -66,8 +66,8 @@ export default {
 }
 #addButton{
     position: absolute;
-    bottom: 1vh;
-    right: 1vh;
+    bottom: 2.5vh;
+    right: 2.5vh;
     height: 5vh;
     width: 5vh;
     border-radius: 50%;
