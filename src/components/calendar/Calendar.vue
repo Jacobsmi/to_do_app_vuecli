@@ -36,7 +36,11 @@ export default {
     components: {
         EditTask
     },
-
+    props: {
+        newTask:{
+            required: false
+        }
+    },
     data: function () {
         return {
             days: [],
@@ -45,6 +49,12 @@ export default {
             taskShowing: false, 
             taskList: null,
             clickedTask: null
+        }
+    },
+    watch: {
+        newTask: function (){
+            this.taskList.push(this.newTask)
+            this.addTaskToCalendar(this.taskList)
         }
     },
     methods: {
@@ -94,7 +104,6 @@ export default {
                     // Then check if in the current month
                     if (curDate.getMonth()+1 === parseInt(dateParts[1])){
                         // If both are true push the task array to the proper day
-                        console.log(task, "is being pushed")
                         this.days[parseInt(dateParts[2])-1].push(task)
                     }
                 }

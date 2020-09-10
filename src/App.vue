@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div id="mainTitle">To Do App</div>
-    <Calendar v-show='calendarShow' v-on:visibilityChange='updateVisibility' />
+    <Calendar :newTask='newTask' v-show='calendarShow' v-on:visibilityChange='updateVisibility' />
     <a id='addButton' v-on:click='addClick'><img id='plus' src="@/assets/plus.png"/></a>
-    <AddTask v-show='addTaskShow' v-on:visibilityChange='updateVisibility' />
+    <AddTask v-show='addTaskShow' v-on:visibilityChange='updateVisibility' v-on:submit='addNewTask'/>
   </div>
 </template>
 
@@ -20,6 +20,7 @@ export default {
     return {
       calendarShow: true,
       addTaskShow: false,
+      newTask: null
     }
   },
   methods:{
@@ -30,7 +31,13 @@ export default {
         this.addTaskShow = value
       }
     },
-
+    addNewTask: function (newT){
+      // When a new task is created in the addTask Vue it triggers the submit event and passes the new Task array
+      // then the newTask data is set in App which is bound to a prop in Calendar.
+      // When the prop changes in calendar it triggers a method that updates
+      this.newTask = newT
+      this.addClick()
+    },
     addClick: function(){
       let addBut = document.getElementById("addButton")
       if (addBut.classList.value === ""){

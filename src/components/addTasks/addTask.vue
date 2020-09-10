@@ -19,7 +19,6 @@ export default {
             'name': document.getElementById("taskName").value,
             'due': document.getElementById("dueDate").value
         }
-        console.log("Submitting task")
         fetch(process.env.VUE_APP_ADD_TASK, {
             method: 'POST',
             headers: {
@@ -27,9 +26,16 @@ export default {
             },
             body: JSON.stringify(data)
         })
-        .then(() => {
-            this.$emit('visibilityChange', 'addTask', false)
-            this.$emit('visibilityChange', 'calendar', true)
+        .then(resp => resp.json())
+        .then( respJSON => {
+            if (!respJSON['status']){
+                let new_task = [respJSON['id'], respJSON['name'], respJSON['due'], respJSON['completed']]
+                this.$emit('submit', new_task)
+                this.$emit('visibilityChange', 'addTask', false)
+                this.$emit('visibilityChange', 'calendar', true)
+            }else{
+                alert("Error adding task")
+            }
         })
     }
 }
